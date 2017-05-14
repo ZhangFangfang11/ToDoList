@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <style>
+        .del{
+            text-decoration: line-through;
+            color: #c9c9c9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar navbar-inverse">
+    <div class="container-fluid container">
+        <div class="navbar-header">
+            <a  class="navbar-brand">toDoList</a>
+        </div>
+
+    </div>
+
+</div>
+<!--下面的代办事项-->
+<div class="container" id="app">
+    <div class="h4 text-danger" >你还有 <span>{{count}}</span>件事情要办</div>
+    <input type="text" class="form-control" placeholder="请输入你要办的事情"  v-model="tit"   @keyup.enter="AddClass($event)">
+    <ul class="nav nav-pills">
+        <!--拿出当前存储的state的值（截取的hash名字），一次和自己（hash值）比较  如果相等说明当前可以增加active-->
+        <li :class="{active:state=='complete'}"> <a href="#complete">全部完成</a> </li>
+        <li :class="{active:state=='finish'}"> <a href="#finish">已完成</a></li>
+        <li :class="{active:state=='unFinish'}"> <a href="#unFinish">未完成</a></li>
+
+    </ul>
+    <ul class="list-group">
+        <li class="list-group-item " v-for="value of clonetodo" :class="{del:value.isChecked}" @dblclick="changeTitle(value)"> <!--双击时告诉改的是哪一项 -->
+           <!--当前循环的这项和我存的这项相等 应该显示的是输入框-->
+           <div v-show="curValue != value">
+               <input type="checkbox"  v-model="value.isChecked">
+               <span>{{value.title}}</span>
+               <button type="button" class="btn btn-danger pull-right btn-xs" @click="remove(value)">&times;</button>
+
+           </div>
+
+            <input type="text" v-model="value.title" v-show="curValue == value" @keyup.13="reset" v-auto-focus="curValue==value" @blur="reset">
+            <!--获取焦点(v-auto-focus)-->
+        </li>
+
+    </ul>
+</div>
+
+<script src="../node_modules/vue/dist/vue.js"></script>
+<script src="js/toDo.js"></script>
+</body>
+</html>
